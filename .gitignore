@@ -1,0 +1,26 @@
+# Virtual Environment
+venv/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Environment Variables
+.env
+
+# Trained Models
+*.pth
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Dataset
+data/raw/
+
+# Uploaded images
+webapp/uploads/
+
+# Test files
+test.jpg
+test_lookup.py
+test_predictor.py

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AI Nutrition Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🥗 AI Nutrition Analyzer</h1>
+    <p>Upload a food image</p>
+
+    <form action="/predict" method="POST" enctype="multipart/form-data">
+
+        <label class="upload-btn" for="imageInput">
+            <span id="fileName">📷 Choose Image</span>
+        </label>
+
+        <input
+            type="file"
+            id="imageInput"
+            name="image"
+            accept="image/*"
+            required>
+
+        <br><br>
+
+        <button class="predict-btn" type="submit">
+            Predict
+        </button>
+
+    </form>
+
+    {% if food %}
+
+    <hr>
+
+    <h2>{{ food.replace("_"," ").title() }}</h2>
+
+    <h3>
+        Confidence : {{ "%.2f"|format(confidence) }}%
+    </h3>
+
+    <div class="nutrition-grid">
+
+        <div class="card">
+            <h4>Calories</h4>
+            <p>{{ nutrition.Calories }} kcal</p>
+        </div>
+
+        <div class="card">
+            <h4>Protein</h4>
+            <p>{{ nutrition.Protein }} g</p>
+        </div>
+
+        <div class="card">
+            <h4>Carbs</h4>
+            <p>{{ nutrition.Carbs }} g</p>
+        </div>
+
+        <div class="card">
+            <h4>Fat</h4>
+            <p>{{ nutrition.Fat }} g</p>
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<script>
+
+const imageInput = document.getElementById("imageInput");
+const fileName = document.getElementById("fileName");
+
+imageInput.addEventListener("change", function () {
+
+    if (this.files.length > 0) {
+        fileName.textContent = "📷 " + this.files[0].name;
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>
