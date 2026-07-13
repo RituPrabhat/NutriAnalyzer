@@ -30,9 +30,9 @@ body{
 
 .container{
 
-    width:850px;
+    width:90%;
 
-    min-height:650px;
+    max-width:700px;
 
     padding:50px;
 
@@ -50,7 +50,7 @@ body{
 }
 
 h1{
-    font-size:52px;
+    font-size:38px;
     margin-bottom:15px;
 }
 
@@ -125,44 +125,86 @@ input[type="file"]{
 
 }
 
+/* Result section */
+
+.result{
+    margin-top:30px;
+}
+
+.result-icon{
+    font-size:42px;
+    margin-bottom:8px;
+}
+
+.food-name{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.confidence-badge{
+    display:inline-block;
+    background:rgba(255,255,255,.15);
+    padding:6px 18px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:bold;
+    letter-spacing:.4px;
+}
+
+.hint{
+    margin-top:12px;
+    font-size:16px;
+    line-height:1.5;
+    color:#dddddd;
+}
+
 /* Nutrition Cards */
 
 .nutrition-grid{
 
-    margin-top:30px;
+    margin-top:28px;
 
     display:grid;
 
     grid-template-columns:repeat(2,1fr);
 
-    gap:20px;
+    gap:16px;
 
 }
 
-.card{
+.nutri-card{
 
-    background:rgba(255,255,255,.15);
+    background:rgba(255,255,255,.1);
 
-    padding:25px;
+    border:1px solid rgba(255,255,255,.15);
 
-    border-radius:15px;
+    padding:22px 15px;
 
-    box-shadow:0 5px 20px rgba(0,0,0,.2);
-
-}
-
-.card h4{
-
-    margin-bottom:10px;
-
-    font-size:22px;
+    border-radius:16px;
 
 }
 
-.card p{
+.nutri-icon{
+    font-size:26px;
+    margin-bottom:6px;
+}
 
-    font-size:20px;
-
+.nutri-value{
+    font-size:26px;
     font-weight:bold;
+}
 
+.nutri-value .unit{
+    font-size:13px;
+    font-weight:normal;
+    margin-left:4px;
+    opacity:.75;
+}
+
+.nutri-label{
+    margin-top:4px;
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    opacity:.7;
 }

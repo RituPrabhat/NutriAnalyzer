@@ -1,4 +1,5 @@
 import os
+import time
 from pathlib import Path
 
 import pandas as pd
@@ -21,9 +22,23 @@ foods = [
     "donuts", "french fries", "fried rice", "grilled salmon", "hot dog",
     "ice cream", "omelette", "pancakes", "pizza", "ramen", "steak",
     "sushi", "tacos", "waffles", "chocolate cake",
+    "baklava", "bibimbap", "bruschetta", "dumplings", "edamame",
+    "falafel", "fish and chips", "garlic bread", "greek salad",
+    "grilled cheese sandwich", "guacamole", "lasagna",
+    "macaroni and cheese", "miso soup", "nachos", "onion rings",
+    "pad thai", "paella", "samosa", "spring rolls",
 ]
 
 URL = "https://api.nal.usda.gov/fdc/v1/foods/search"
+
+# Try FNDDS first — it's USDA's "as prepared/eaten" dataset, so dishes like
+# "caesar salad" or "sushi" match a real recipe entry instead of a random
+# raw ingredient. Foundation/SR Legacy (raw ingredients) is the fallback,
+# for simple foods FNDDS doesn't cover.
+DATA_TYPE_STAGES = [
+    ["Survey (FNDDS)"],
+    ["Foundation", "SR Legacy"],
+]
 
 
 def extract_nutrients(item):
@@ -53,39 +68,59 @@ def pick_best(foods_list):
     return extract_nutrients(foods_list[0]) if foods_list else None
 
 
+def search_foods(query, data_types, retries=3):
+    params = {
+        "query": query,
+        "pageSize": 10,
+        "dataType": data_types,
+        "api_key": API_KEY,
+    }
+    for attempt in range(1, retries + 1):
+        response = requests.get(URL, params=params, timeout=30)
+        if response.status_code == 200:
+            return response.json().get("foods", [])
+        # USDA's API intermittently 400s valid requests — retry a couple
+        # times before treating it as a real failure.
+        if attempt < retries:
+            time.sleep(1)
+    print(f"  Request failed ({response.status_code}) after {retries} attempts")
+    return []
+
+
 nutrition_data = []
 print("Downloading nutrition information...\n")
 
 for i, food in enumerate(foods, start=1):
     print(f"[{i}/{len(foods)}] {food}")
 
-    params = {
-        "query": food,
-        "pageSize": 10,
-        # Prefer curated data over crowd-sourced Branded entries
-        "dataType": ["Foundation", "SR Legacy"],
-        "api_key": API_KEY,
-    }
+    nutrients = None
+    for data_types in DATA_TYPE_STAGES:
+        results = search_foods(food, data_types)
+        if results:
+            nutrients = pick_best(results)
+            if nutrients is not None:
+                break
 
-    response = requests.get(URL, params=params, timeout=30)
-    if response.status_code != 200:
-        print(f"  Request failed ({response.status_code})\n")
-        continue
-
-    results = response.json().get("foods", [])
-    if not results:
+    if nutrients is None:
         print("  Not found\n")
         continue
 
-    nutrients = pick_best(results)
-    if nutrients is None:
-        print("  No usable nutrients\n")
-        continue
+    calories = nutrients["Calories"] or 0
+    macro_calories = (nutrients["Protein"] or 0) * 4 \
+        + (nutrients["Carbs"] or 0) * 4 \
+        + (nutrients["Fat"] or 0) * 9
+    if calories and abs(macro_calories - calories) > 0.25 * calories:
+        print(
+            f"  WARNING - macro mismatch: label says {calories:.0f} kcal but "
+            f"protein/carbs/fat imply ~{macro_calories:.0f} kcal - "
+            "this match is probably wrong, double check it manually."
+        )
 
     nutrition_data.append({
         "Food": food.replace(" ", "_"),
         **nutrients,
     })
+    print()
 
 print("\nCreating CSV...")
 df = pd.DataFrame(nutrition_data)

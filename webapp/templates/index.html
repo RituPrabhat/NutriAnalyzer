@@ -37,29 +37,50 @@
     {% if not_food %}
 
     <hr>
-    <h2>🤔 Not a recognized food</h2>
-    <p>
-        This doesn't look like one of the 20 foods I know
-        (top guess was only {{ "%.1f"|format(confidence) }}% confident).
-        Try a clearer photo of a single food item.
-    </p>
+    <div class="result">
+        <div class="result-icon">🤔</div>
+        <h2>Not a recognized food</h2>
+        <p class="hint">
+            This doesn't look like one of the 40 foods I know
+            (top guess was only {{ "%.1f"|format(confidence) }}% confident).
+            Try a clearer photo of a single food item.
+        </p>
+    </div>
 
     {% elif food %}
 
     <hr>
-    <h2>{{ food.replace("_"," ").title() }}</h2>
-    <h3>Confidence : {{ "%.2f"|format(confidence) }}%</h3>
+    <div class="result">
+        <h2 class="food-name">{{ food.replace("_"," ").title() }}</h2>
+        <span class="confidence-badge">{{ "%.0f"|format(confidence) }}% confident</span>
 
-    {% if nutrition %}
-    <div class="nutrition-grid">
-        <div class="card"><h4>Calories</h4><p>{{ nutrition.Calories }} kcal</p></div>
-        <div class="card"><h4>Protein</h4><p>{{ nutrition.Protein }} g</p></div>
-        <div class="card"><h4>Carbs</h4><p>{{ nutrition.Carbs }} g</p></div>
-        <div class="card"><h4>Fat</h4><p>{{ nutrition.Fat }} g</p></div>
+        {% if nutrition %}
+        <div class="nutrition-grid">
+            <div class="nutri-card">
+                <div class="nutri-icon">🔥</div>
+                <div class="nutri-value">{{ nutrition.Calories }}<span class="unit">kcal</span></div>
+                <div class="nutri-label">Calories</div>
+            </div>
+            <div class="nutri-card">
+                <div class="nutri-icon">🍗</div>
+                <div class="nutri-value">{{ nutrition.Protein }}<span class="unit">g</span></div>
+                <div class="nutri-label">Protein</div>
+            </div>
+            <div class="nutri-card">
+                <div class="nutri-icon">🌾</div>
+                <div class="nutri-value">{{ nutrition.Carbs }}<span class="unit">g</span></div>
+                <div class="nutri-label">Carbs</div>
+            </div>
+            <div class="nutri-card">
+                <div class="nutri-icon">🧈</div>
+                <div class="nutri-value">{{ nutrition.Fat }}<span class="unit">g</span></div>
+                <div class="nutri-label">Fat</div>
+            </div>
+        </div>
+        {% else %}
+        <p class="hint">Nutrition data not available for this food.</p>
+        {% endif %}
     </div>
-    {% else %}
-    <p>Nutrition data not available for this food.</p>
-    {% endif %}
 
     {% endif %}
 

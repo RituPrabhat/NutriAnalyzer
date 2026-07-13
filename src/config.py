@@ -8,7 +8,7 @@ MODEL_PATH = PROJECT_ROOT / "food_classifier.pth"
 NUTRITION_CSV = PROJECT_ROOT / "data" / "nutrition" / "nutrition_data.csv"
 IMAGES_FOLDER = PROJECT_ROOT / "data" / "raw" / "food101" / "food-101" / "images"
 
-# The 20 classes — order MUST stay fixed (it defines the model's label indices)
+# The 40 classes — order MUST stay fixed (it defines the model's label indices)
 SELECTED_CLASSES = [
     "apple_pie",
     "hamburger",
@@ -30,4 +30,24 @@ SELECTED_CLASSES = [
     "tacos",
     "waffles",
     "chocolate_cake",
+    "baklava",
+    "bibimbap",
+    "bruschetta",
+    "dumplings",
+    "edamame",
+    "falafel",
+    "fish_and_chips",
+    "garlic_bread",
+    "greek_salad",
+    "grilled_cheese_sandwich",
+    "guacamole",
+    "lasagna",
+    "macaroni_and_cheese",
+    "miso_soup",
+    "nachos",
+    "onion_rings",
+    "pad_thai",
+    "paella",
+    "samosa",
+    "spring_rolls",
 ]

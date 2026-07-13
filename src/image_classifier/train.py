@@ -12,7 +12,7 @@ from src.image_classifier.model import get_model
 # -----------------------------
 BATCH_SIZE = 32
 LEARNING_RATE = 0.001
-EPOCHS = 5
+EPOCHS = 10
 VAL_SPLIT = 0.2
 
 print("Images Folder:", IMAGES_FOLDER)
@@ -74,7 +74,8 @@ print("Device:", device)
 model = get_model(len(SELECTED_CLASSES)).to(device)
 
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.fc.parameters(), lr=LEARNING_RATE)
+trainable_params = list(model.layer4.parameters()) + list(model.fc.parameters())
+optimizer = torch.optim.Adam(trainable_params, lr=LEARNING_RATE)
 
 
 def evaluate(loader):
