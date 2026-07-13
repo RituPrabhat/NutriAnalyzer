@@ -1,0 +1,7 @@
+torch
+torchvision
+flask
+pandas
+requests
+python-dotenv
+pillow

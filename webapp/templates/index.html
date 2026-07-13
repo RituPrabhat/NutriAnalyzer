@@ -34,39 +34,32 @@
 
     </form>
 
-    {% if food %}
+    {% if not_food %}
 
     <hr>
+    <h2>🤔 Not a recognized food</h2>
+    <p>
+        This doesn't look like one of the 20 foods I know
+        (top guess was only {{ "%.1f"|format(confidence) }}% confident).
+        Try a clearer photo of a single food item.
+    </p>
 
+    {% elif food %}
+
+    <hr>
     <h2>{{ food.replace("_"," ").title() }}</h2>
+    <h3>Confidence : {{ "%.2f"|format(confidence) }}%</h3>
 
-    <h3>
-        Confidence : {{ "%.2f"|format(confidence) }}%
-    </h3>
-
+    {% if nutrition %}
     <div class="nutrition-grid">
-
-        <div class="card">
-            <h4>Calories</h4>
-            <p>{{ nutrition.Calories }} kcal</p>
-        </div>
-
-        <div class="card">
-            <h4>Protein</h4>
-            <p>{{ nutrition.Protein }} g</p>
-        </div>
-
-        <div class="card">
-            <h4>Carbs</h4>
-            <p>{{ nutrition.Carbs }} g</p>
-        </div>
-
-        <div class="card">
-            <h4>Fat</h4>
-            <p>{{ nutrition.Fat }} g</p>
-        </div>
-
+        <div class="card"><h4>Calories</h4><p>{{ nutrition.Calories }} kcal</p></div>
+        <div class="card"><h4>Protein</h4><p>{{ nutrition.Protein }} g</p></div>
+        <div class="card"><h4>Carbs</h4><p>{{ nutrition.Carbs }} g</p></div>
+        <div class="card"><h4>Fat</h4><p>{{ nutrition.Fat }} g</p></div>
     </div>
+    {% else %}
+    <p>Nutrition data not available for this food.</p>
+    {% endif %}
 
     {% endif %}
 
