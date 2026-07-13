@@ -1,13 +1,14 @@
 import sys
 from pathlib import Path
 
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, send_from_directory
 from werkzeug.utils import secure_filename
 
 # Add project root to path so `src.` imports work
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))
 
+from src.config import SELECTED_CLASSES
 from src.image_classifier.predictor import predict_image
 from src.nutrition_engine.nutrition_lookup import NutritionLookup
 
@@ -22,6 +23,12 @@ ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 lookup = NutritionLookup()
 
 
+@app.context_processor
+def inject_known_foods():
+    names = sorted(f.replace("_", " ").title() for f in SELECTED_CLASSES)
+    return {"known_foods": names}
+
+
 def allowed_file(filename):
     return Path(filename).suffix.lower() in ALLOWED_EXTENSIONS
 
@@ -29,6 +36,11 @@ def allowed_file(filename):
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 
 @app.route("/predict", methods=["POST"])
@@ -52,6 +64,7 @@ def predict():
             "index.html",
             not_food=True,
             confidence=confidence,
+            image_filename=filename,
         )
 
     nutrition = lookup.get_nutrition(food)
@@ -61,6 +74,7 @@ def predict():
         food=food,
         confidence=confidence,
         nutrition=nutrition,
+        image_filename=filename,
     )
 
 

@@ -11,7 +11,7 @@
 <div class="container">
 
     <h1>🥗 AI Nutrition Analyzer</h1>
-    <p>Upload a food image</p>
+    <p class="upload-label">Upload a food image</p>
 
     <form action="/predict" method="POST" enctype="multipart/form-data">
 
@@ -34,11 +34,27 @@
 
     </form>
 
+    <details class="foods-list">
+        <summary>Which {{ known_foods|length }} foods do I know?</summary>
+        <div class="food-pills">
+            {% for name in known_foods %}
+            <span class="food-pill">{{ name }}</span>
+            {% endfor %}
+        </div>
+    </details>
+
+    {% if not_food or food %}
+    <hr>
+    {% if image_filename %}
+    <div class="uploaded-preview">
+        <img src="{{ url_for('uploaded_file', filename=image_filename) }}" alt="Uploaded image">
+    </div>
+    {% endif %}
+    {% endif %}
+
     {% if not_food %}
 
-    <hr>
     <div class="result">
-        <div class="result-icon">🤔</div>
         <h2>Not a recognized food</h2>
         <p class="hint">
             This doesn't look like one of the 40 foods I know
@@ -49,7 +65,6 @@
 
     {% elif food %}
 
-    <hr>
     <div class="result">
         <h2 class="food-name">{{ food.replace("_"," ").title() }}</h2>
         <span class="confidence-badge">{{ "%.0f"|format(confidence) }}% confident</span>
@@ -57,24 +72,20 @@
         {% if nutrition %}
         <div class="nutrition-grid">
             <div class="nutri-card">
-                <div class="nutri-icon">🔥</div>
-                <div class="nutri-value">{{ nutrition.Calories }}<span class="unit">kcal</span></div>
                 <div class="nutri-label">Calories</div>
+                <div class="nutri-value">{{ nutrition.Calories }}<span class="unit">kcal</span></div>
             </div>
             <div class="nutri-card">
-                <div class="nutri-icon">🍗</div>
-                <div class="nutri-value">{{ nutrition.Protein }}<span class="unit">g</span></div>
                 <div class="nutri-label">Protein</div>
+                <div class="nutri-value">{{ nutrition.Protein }}<span class="unit">g</span></div>
             </div>
             <div class="nutri-card">
-                <div class="nutri-icon">🌾</div>
-                <div class="nutri-value">{{ nutrition.Carbs }}<span class="unit">g</span></div>
                 <div class="nutri-label">Carbs</div>
+                <div class="nutri-value">{{ nutrition.Carbs }}<span class="unit">g</span></div>
             </div>
             <div class="nutri-card">
-                <div class="nutri-icon">🧈</div>
-                <div class="nutri-value">{{ nutrition.Fat }}<span class="unit">g</span></div>
                 <div class="nutri-label">Fat</div>
+                <div class="nutri-value">{{ nutrition.Fat }}<span class="unit">g</span></div>
             </div>
         </div>
         {% else %}

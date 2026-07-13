@@ -59,6 +59,10 @@ p{
     color:#eeeeee;
 }
 
+.upload-label{
+    margin-bottom:24px;
+}
+
 /* Hide original input */
 
 input[type="file"]{
@@ -125,15 +129,70 @@ input[type="file"]{
 
 }
 
+/* Known foods list */
+
+.foods-list{
+    margin-top:22px;
+    text-align:left;
+}
+
+.foods-list summary{
+    cursor:pointer;
+    text-align:center;
+    font-size:14px;
+    color:#cfcfcf;
+    list-style:none;
+}
+
+.foods-list summary::-webkit-details-marker{
+    display:none;
+}
+
+.foods-list summary::after{
+    content:" ▾";
+}
+
+.foods-list[open] summary::after{
+    content:" ▴";
+}
+
+.food-pills{
+    margin-top:14px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+}
+
+.food-pill{
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.15);
+    padding:5px 12px;
+    border-radius:999px;
+    font-size:13px;
+    color:#e5e5e5;
+}
+
+/* Uploaded image preview */
+
+.uploaded-preview{
+    margin-top:24px;
+    display:flex;
+    justify-content:center;
+}
+
+.uploaded-preview img{
+    max-width:220px;
+    max-height:220px;
+    object-fit:cover;
+    border-radius:16px;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+}
+
 /* Result section */
 
 .result{
-    margin-top:30px;
-}
-
-.result-icon{
-    font-size:42px;
-    margin-bottom:8px;
+    margin-top:24px;
 }
 
 .food-name{
@@ -174,23 +233,33 @@ input[type="file"]{
 
 .nutri-card{
 
-    background:rgba(255,255,255,.1);
+    background:rgba(255,255,255,.08);
 
-    border:1px solid rgba(255,255,255,.15);
+    border-left:3px solid var(--accent);
 
-    padding:22px 15px;
+    padding:18px 20px;
 
-    border-radius:16px;
+    border-radius:10px;
+
+    text-align:left;
 
 }
 
-.nutri-icon{
-    font-size:26px;
+.nutri-card:nth-child(1){ --accent:#f97316; }
+.nutri-card:nth-child(2){ --accent:#38bdf8; }
+.nutri-card:nth-child(3){ --accent:#eab308; }
+.nutri-card:nth-child(4){ --accent:#f472b6; }
+
+.nutri-label{
+    font-size:12px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    opacity:.65;
     margin-bottom:6px;
 }
 
 .nutri-value{
-    font-size:26px;
+    font-size:24px;
     font-weight:bold;
 }
 
@@ -199,12 +268,4 @@ input[type="file"]{
     font-weight:normal;
     margin-left:4px;
     opacity:.75;
-}
-
-.nutri-label{
-    margin-top:4px;
-    font-size:12px;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    opacity:.7;
 }
